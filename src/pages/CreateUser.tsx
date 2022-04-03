@@ -206,8 +206,8 @@ const CreateUser = (props: Props) => {
                 </Grid>
 
                 <Grid item xs={12} md={6}>
-                  <FormControl>
-                    <FormLabel {...getFieldProps("gender")}>Gender</FormLabel>
+                  <FormControl component="fieldset" variant="standard">
+                    <FormLabel component="legend">Gender</FormLabel>
                     <RadioGroup row {...getFieldProps("gender")}>
                       <FormControlLabel
                         value="female"

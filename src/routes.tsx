@@ -1,5 +1,6 @@
 import { Navigate, useRoutes } from "react-router-dom";
 import CreateUser from "./pages/CreateUser";
+import Page404 from "./pages/Page404";
 import UpdateUser from "./pages/UpdateUser";
 import Users from "./pages/Users";
 
@@ -16,15 +17,13 @@ const Router = (props: Props) => {
         },
         { path: "create", element: <CreateUser /> },
         { path: ":id", element: <UpdateUser /> },
-
-        // { path: "*", element: <Navigate to="/404" /> },
       ],
     },
     {
       path: "/",
       children: [
         { path: "", element: <Navigate to="users" /> },
-        { path: "404", element: <h1>Not Found</h1> },
+        { path: "404", element: <Page404 /> },
         { path: "*", element: <Navigate to="/404" /> },
       ],
     },

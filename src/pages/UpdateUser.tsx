@@ -24,7 +24,7 @@ import FormLabel from "@mui/material/FormLabel";
 import FormGroup from "@mui/material/FormGroup";
 import { AxiosError } from "axios";
 import _ from "lodash";
-import { CircularProgress, Stack } from "@mui/material";
+import { CircularProgress, Stack, useTheme } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 
@@ -85,6 +85,7 @@ const UpdateUser = (props: Props) => {
   );
   const navigate = useNavigate();
   const params = useParams();
+  const theme = useTheme();
   console.log(params);
   const { id = null } = params;
   const { enqueueSnackbar } = useSnackbar();
@@ -258,7 +259,11 @@ const UpdateUser = (props: Props) => {
                 >
                   User Not Found
                 </Typography>
-                <FontAwesomeIcon icon={faFaceSadTear} size="4x" />
+                <FontAwesomeIcon
+                  color={theme.palette.primary.dark}
+                  icon={faFaceSadTear}
+                  size="4x"
+                />
                 <Button variant="outlined" onClick={() => navigate(-1)}>
                   BACK
                 </Button>
@@ -342,10 +347,8 @@ const UpdateUser = (props: Props) => {
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                      <FormControl>
-                        <FormLabel {...getFieldProps("gender")}>
-                          Gender
-                        </FormLabel>
+                      <FormControl component="fieldset" variant="standard">
+                        <FormLabel component="legend">Gender</FormLabel>
                         <RadioGroup row {...getFieldProps("gender")}>
                           <FormControlLabel
                             value="female"

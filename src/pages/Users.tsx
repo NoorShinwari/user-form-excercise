@@ -17,7 +17,10 @@ import {
   TablePagination,
   TableHead,
   Chip,
+  useTheme,
 } from "@mui/material";
+import { alpha } from "@mui/material/styles";
+
 // components
 import Page from "../components/Page";
 import User from "../models/User";
@@ -28,14 +31,7 @@ import MoreMenu from "../components/MoreMenu";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useSnackbar } from "notistack";
-
-const TABLE_HEAD = [
-  { id: "name", label: "Name", alignRight: false },
-  { id: "email", label: "Email", alignRight: false },
-  { id: "gender", label: "Gender", alignRight: false },
-  { id: "status", label: "Status", alignRight: false },
-  { id: "" },
-];
+import { faFaceSadTear } from "@fortawesome/free-regular-svg-icons";
 
 type Props = {};
 
@@ -45,13 +41,25 @@ const Users = (props: Props) => {
   const [rowsPerPage, setRowsPerPage] = React.useState<number>(20);
   const [usersCount, setUsersCount] = React.useState<number>(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
-  const [error, setError] = React.useState(false);
+  const [hasError, setHasError] = React.useState<boolean>(false);
   const { enqueueSnackbar } = useSnackbar();
+  const theme = useTheme();
+
+  const TABLE_HEAD = React.useMemo(
+    () => [
+      { id: "name", label: "Name", alignRight: false },
+      { id: "email", label: "Email", alignRight: false },
+      { id: "gender", label: "Gender", alignRight: false },
+      { id: "status", label: "Status", alignRight: false },
+      { id: "" },
+    ],
+    []
+  );
 
   const fetchUsers = React.useCallback(async () => {
     try {
       setIsLoading(true);
-      setError(false);
+      setHasError(false);
       const response = await UserService.get({ page: page + 1 });
       console.log(response);
       if (response.status === 200) {
@@ -68,7 +76,7 @@ const Users = (props: Props) => {
         setIsLoading(false);
       }
     } catch (error) {
-      setError(true);
+      setHasError(true);
       setIsLoading(false);
     }
   }, [page]);
@@ -121,10 +129,10 @@ const Users = (props: Props) => {
     setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(1);
-  };
+  // const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(1);
+  // };
   const stringToColor = (string: string) => {
     let hash = 0;
     let i;
@@ -155,6 +163,45 @@ const Users = (props: Props) => {
       }`,
     };
   };
+  if (hasError) {
+    return (
+      <Page title="Something went wrong!">
+        <Container maxWidth="xl">
+          <Card
+            sx={{
+              height: 200,
+              justifyContent: "center",
+              display: "flex",
+            }}
+          >
+            <Stack
+              alignContent={"center"}
+              sx={{ gap: 1.5 }}
+              justifyContent="center"
+            >
+              <Typography
+                variant="h4"
+                align="center"
+                color="error"
+                justifyContent={"center"}
+                sx={{
+                  display: "flex",
+                  paddingX: 4,
+                }}
+              >
+                Something went wrong!
+              </Typography>
+              <FontAwesomeIcon
+                color={theme.palette.primary.dark}
+                icon={faFaceSadTear}
+                size="4x"
+              />
+            </Stack>
+          </Card>
+        </Container>
+      </Page>
+    );
+  }
 
   return (
     <Page title="Users">
@@ -179,7 +226,12 @@ const Users = (props: Props) => {
           justifyContent="space-between"
           mb={5}
         >
-          <Typography variant="h4" gutterBottom>
+          <Typography
+            variant="h4"
+            color="primary"
+            fontWeight={"bold"}
+            // gutterBottom
+          >
             Users
           </Typography>
           <Button
@@ -196,10 +248,17 @@ const Users = (props: Props) => {
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
               <Table>
-                <TableHead>
+                <TableHead
+                  sx={{
+                    backgroundColor: alpha(theme.palette.primary.dark, 0.72),
+                  }}
+                >
                   <TableRow>
                     {TABLE_HEAD.map((headCell) => (
                       <TableCell
+                        sx={{
+                          color: theme.palette.common.white,
+                        }}
                         key={headCell.id}
                         align={headCell.alignRight ? "right" : "left"}
                       >
@@ -274,12 +333,12 @@ const Users = (props: Props) => {
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+            // onRowsPerPageChange={handleChangeRowsPerPage}
             showFirstButton
             showLastButton
           />
         </Card>
-      </Container>{" "}
+      </Container>
     </Page>
   );
 };
