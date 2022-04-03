@@ -1,28 +1,22 @@
-import React from "react";
-import logo from "./logo.svg";
-import "bootstrap/dist/css/bootstrap.min.css";
+import * as React from "react";
+import "simplebar/dist/simplebar.min.css";
+import ScrollToTop from "./components/ScrollToTop";
+import Router from "./routes";
+import { SnackbarProvider } from "notistack";
 
-import "./App.css";
-
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        maxSnack={3}
+      >
+        <ScrollToTop />
+        <Router />
+      </SnackbarProvider>
+    </React.Fragment>
   );
 }
-
-export default App;
