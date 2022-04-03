@@ -24,15 +24,21 @@ class UserService {
   get: (params: UserParams) => Promise<AxiosResponse<Array<User>>> = (
     params
   ) => {
+    const headers = this.getHeadersWithToken();
+
     return API.get(UserService.pathname, {
       params: params,
+      ...headers,
     });
   };
 
   getById: (id: string) => Promise<AxiosResponse<User>> = (id) => {
+    /// Adding a token here because without the token the newly created/modified can't be found.
+    const headers = this.getHeadersWithToken();
     const pathname = `${UserService.pathname}/${id}`;
-
-    return API.get(pathname);
+    return API.get(pathname, {
+      ...headers,
+    });
   };
 
   create: (data: User) => Promise<AxiosResponse<User>> = (data) => {
