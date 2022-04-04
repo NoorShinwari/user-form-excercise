@@ -60,6 +60,8 @@ const Users = (props: Props) => {
     try {
       setIsLoading(true);
       setHasError(false);
+
+      /// Adding page + 1 because the pagination is zero indexed while the api is one indexed.
       const response = await UserService.get({ page: page + 1 });
       console.log(response);
       if (response.status === 200) {
@@ -122,12 +124,12 @@ const Users = (props: Props) => {
     },
     [enqueueSnackbar, fetchUsers]
   );
-  const handleChangePage = (
-    event: any,
-    newPage: React.SetStateAction<number>
-  ) => {
-    setPage(newPage);
-  };
+  const handleChangePage = React.useCallback(
+    (event: any, newPage: React.SetStateAction<number>) => {
+      setPage(newPage);
+    },
+    []
+  );
 
   // const handleChangeRowsPerPage = (event: { target: { value: string } }) => {
   //   setRowsPerPage(parseInt(event.target.value, 10));
